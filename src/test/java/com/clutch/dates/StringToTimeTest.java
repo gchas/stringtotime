@@ -1,9 +1,13 @@
 package com.clutch.dates;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
 
@@ -12,7 +16,37 @@ import org.springframework.beans.BeanWrapperImpl;
 
 public class StringToTimeTest extends TestCase {
 
-	public void testMySqlDateFormat() {
+    /*
+    public void testCustom() throws ParseException {
+
+        String dateAsString = "2010.03.12";
+        StringToTime date = new StringToTime(dateAsString);
+        System.out.println(date.getCal().getTime());
+
+        //simple();
+    }
+
+    public void simple() throws ParseException {
+
+        String timeExpr = "(\\d{1,2})(:(\\d{1,2}))?(:(\\d{1,2})(\\.(\\d{1,3}))?)?( *(am?|pm?))?( *\\-\\d{4}|[a-z]{3}|[a-z ]+)?";
+
+        String dateAsString = "03/12/2010";
+        String pattern = "\\d{1,2}(\\.|\\/|\\-|\\:)\\d{1,2}(\\.|\\/|\\-|\\:)\\d{2,4}";
+        String datePattern = "d/M/y";
+
+        Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(dateAsString);
+        if (m.matches()) {
+            SimpleDateFormat sdf = new SimpleDateFormat(datePattern, Locale.UK);
+            sdf.parse(dateAsString);
+            System.out.println("FOUND");
+        } else {
+            System.out.println("NOT FOUND");
+        }
+    }
+    */
+
+    public void testMySqlDateFormat() {
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
@@ -27,7 +61,7 @@ public class StringToTimeTest extends TestCase {
 		
 		assertEquals(new Date(cal.getTimeInMillis()), new StringToTime("1981-10-26 15:26:03.435", now));
 	}
-	
+
 	/* FIXME
 	public void testISO8601() {
 		Date now = new Date();
@@ -45,7 +79,7 @@ public class StringToTimeTest extends TestCase {
 		assertEquals(new Date(cal.getTimeInMillis()), new StringToTime("1981-10-26T15:26:03.435ZEST", now));
 	}
 	*/
-	
+
 	public void test1200Seconds() {
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
@@ -344,7 +378,4 @@ public class StringToTimeTest extends TestCase {
 		assertEquals(new StringToTime("last Sunday", now), new StringToTime("Sun -1 week", now));
 		assertEquals(new StringToTime("last Sat", now), new StringToTime("Saturday -1 week", now));
 	}
-	
-	
-	
 }

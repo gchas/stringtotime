@@ -2,10 +2,7 @@ package com.clutch.dates;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -112,7 +109,7 @@ public class StringToTime extends Date {
 		// e.g., 26 October 1981, or 26 Oct 1981, or 26 Oct 81
 		new PatternAndFormat(
 			Pattern.compile("\\d{1,2} +[a-z]+ +(\\d{2}|\\d{4})", Pattern.CASE_INSENSITIVE),
-			new Format("d MMM y")	
+			new Format("d MMM y")
 		),
 		
 		// now or today
@@ -132,7 +129,13 @@ public class StringToTime extends Date {
 			Pattern.compile("[a-z]+ +\\d{1,2} *, *(\\d{2}|\\d{4})", Pattern.CASE_INSENSITIVE),
 			new Format("MMM d, y")
 		),
-		
+
+        // e.g., Sat Mar 08 00:00:00 CET 2014
+        new PatternAndFormat(
+                Pattern.compile("[a-z]{3} [a-z]{3} \\d{2} " + timeExpr + " [a-z]{3,4} \\d{4}", Pattern.CASE_INSENSITIVE),
+                new Format("EEE MMM d HH:mm:ss z yyyy", Locale.UK)
+        ),
+
 		// e.g., 10/26/1981 or 10/26/81
 		new PatternAndFormat(
 			Pattern.compile("\\d{1,2}/\\d{1,2}/\\d{2,4}"),
@@ -144,7 +147,19 @@ public class StringToTime extends Date {
 			Pattern.compile("\\d{1,2}\\-\\d{1,2}\\-\\d{2,4}"),
 			new Format("M-d-y")
 		),
-		
+
+        // e.g., 10-26-1981 or 10-26-81
+        new PatternAndFormat(
+            Pattern.compile("\\d{1,2}\\:\\d{1,2}\\:\\d{2,4}"),
+            new Format("M:d:y")
+        ),
+
+        // e.g., 10.26.1981 or 10.26.81
+        new PatternAndFormat(
+                Pattern.compile("\\d{1,2}\\.\\d{1,2}\\.\\d{2,4}"),
+                new Format("M.d.y")
+        ),
+
 		// e.g., 10/26 or 10-26
 		new PatternAndFormat(
 			Pattern.compile("(\\d{1,2})(/|\\-)(\\d{1,2})"),
@@ -162,7 +177,19 @@ public class StringToTime extends Date {
 			Pattern.compile("\\d{4}\\-\\d{1,2}\\-\\d{1,2}"),
 			new Format("y-M-d")
 		),
-		
+
+        // e.g., 1981-10-26
+        new PatternAndFormat(
+            Pattern.compile("\\d{4}:\\d{1,2}:\\d{1,2}"),
+            new Format("y:M:d")
+        ),
+
+        // e.g., 1981-10-26
+        new PatternAndFormat(
+                Pattern.compile("\\d{4}\\.\\d{1,2}\\.\\d{1,2}"),
+                new Format("y.M.d")
+        ),
+
 		// e.g., October or Oct
 		new PatternAndFormat(
 			Pattern.compile("(Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|Jun(e)?|Jul(y)?|Aug(ust)?|Sep(tember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?)", Pattern.CASE_INSENSITIVE),
@@ -187,13 +214,11 @@ public class StringToTime extends Date {
 			new Format(FormatType.LAST)
 		),
 		
-		// compound statement
+		// compound statement, 2014:03:09 02:33:56
 		new PatternAndFormat(
-			Pattern.compile("(.*) +(((\\+|\\-){1}.*)|"+timeExpr+")$", Pattern.CASE_INSENSITIVE),
+			Pattern.compile("(.*) +(((\\+|\\-|:){1}.*)|"+timeExpr+")$", Pattern.CASE_INSENSITIVE),
 			new Format(FormatType.COMPOUND)
 		)
-		
-		
 	};
 	
 	/** Date/Time string parsed */
@@ -435,6 +460,8 @@ public class StringToTime extends Date {
 		private String sdf;
 		
 		private FormatType type;
+
+        private Locale locale = Locale.getDefault();
 		
 		public Format(FormatType type) {
 			this.type = type;
@@ -443,7 +470,12 @@ public class StringToTime extends Date {
 		public Format(String sdf) {
 			this.sdf = sdf;
 		}
-		
+
+        public Format(String sdf, Locale locale) {
+            this.sdf = sdf;
+            this.locale = locale;
+        }
+
 		public String toString() {
 			if (sdf != null)
 				return sdf;
@@ -453,7 +485,7 @@ public class StringToTime extends Date {
 		 
 		public Date parse(String dateTimeString, Date now, Matcher m) throws ParseException {
 			if (sdf != null)
-				return new SimpleDateFormat(sdf).parse(dateTimeString);
+				return new SimpleDateFormat(sdf, locale).parse(dateTimeString);
 			else {
 				dateTimeString = removeExtraSpaces.matcher(dateTimeString).replaceAll(" ").toLowerCase();
 				
