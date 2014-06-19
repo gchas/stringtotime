@@ -69,7 +69,7 @@ public class DateServiceImpl implements DateService {
             return date.getCal().getTime();
 
         } catch (StringToTimeException ste) {
-            log.debug(ste.getMessage());
+            log.warn(ste.getMessage());
             return null;
         }
     }
