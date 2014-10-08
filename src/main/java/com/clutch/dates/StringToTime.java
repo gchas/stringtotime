@@ -136,6 +136,12 @@ public class StringToTime extends Date {
                 new Format("EEE MMM d HH:mm:ss z yyyy", Locale.UK)
         ),
 
+        // e.g., Sep 25 2014 10:28AM
+        new PatternAndFormat(
+                Pattern.compile("[a-z]{3} \\d{2} \\d{4} " + timeExpr, Pattern.CASE_INSENSITIVE),
+                new Format("MMM d yyyy HH:mm", Locale.UK)
+        ),
+
 		// e.g., 10/26/1981 or 10/26/81
 		new PatternAndFormat(
 			Pattern.compile("\\d{1,2}/\\d{1,2}/\\d{2,4}"),

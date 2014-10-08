@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.clutch.dates.service.DateService;
+import com.clutch.dates.service.DateServiceImpl;
 import junit.framework.TestCase;
 
 import org.springframework.beans.BeanWrapper;
@@ -17,6 +19,16 @@ import org.springframework.beans.BeanWrapperImpl;
 public class StringToTimeTest extends TestCase {
 
     /*
+    public void testDate() {
+
+        DateService ds = new DateServiceImpl();
+
+        Date date = ds.parseStringToDate("Sep 25 2014 10:28AM");
+
+        System.out.println("Date: " + date.toString());
+
+    }
+
     public void testCustom() throws ParseException {
 
         String dateAsString = "2010.03.12";
