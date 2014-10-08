@@ -65,6 +65,15 @@ public class DateServiceImpl implements DateService {
                     input = token0AsStr + "/" + token1AsStr + "/" + token2AsStr;
                 }
             }
+
+            if (input.contains("  ")) {
+
+                while (input.contains("  ")) {
+
+                    input = input.replaceAll("  ", " ");
+                }
+            }
+
             StringToTime date = new StringToTime(input);
             return date.getCal().getTime();
 

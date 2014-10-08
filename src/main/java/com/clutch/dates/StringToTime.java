@@ -138,7 +138,7 @@ public class StringToTime extends Date {
 
         // e.g., Sep 25 2014 10:28AM
         new PatternAndFormat(
-                Pattern.compile("[a-z]{3} \\d{2} \\d{4} " + timeExpr, Pattern.CASE_INSENSITIVE),
+                Pattern.compile("[a-z]{3} (\\d{2}|\\d{1}) \\d{4} " + timeExpr, Pattern.CASE_INSENSITIVE),
                 new Format("MMM d yyyy HH:mm", Locale.UK)
         ),
 

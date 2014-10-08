@@ -18,12 +18,13 @@ import org.springframework.beans.BeanWrapperImpl;
 
 public class StringToTimeTest extends TestCase {
 
-    /*
+/*
     public void testDate() {
 
         DateService ds = new DateServiceImpl();
 
         Date date = ds.parseStringToDate("Sep 25 2014 10:28AM");
+        //Date date = ds.parseStringToDate("Oct 1 2014 4:12PM");
 
         System.out.println("Date: " + date.toString());
 
